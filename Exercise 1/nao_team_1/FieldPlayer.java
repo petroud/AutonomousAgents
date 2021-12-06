@@ -1,0 +1,186 @@
+//-----------------------------------------------------------------------------
+//  File:         FieldPlayer.java (to be used in a Webots java controllers)
+//  Date:         April 30, 2008
+//  Description:  Field player "2", "3" or "4" for "red" or "blue" team
+//  Project:      Robotstadium, the online robot soccer competition
+//  Author:       Yvan Bourquin - www.cyberbotics.com
+//  Changes:      November 4, 2008: Adapted to Webots6
+//-----------------------------------------------------------------------------
+
+import com.cyberbotics.webots.controller.*;
+
+public class FieldPlayer extends Player {
+
+  private Motion backwardsMotion, forwardsMotion, forwards50Motion, turnRight40Motion, turnLeft40Motion;
+  private Motion turnRight60Motion, turnLeft60Motion, turnLeft180Motion, sideStepRightMotion, sideStepLeftMotion, shootMotion;
+
+  private double goalDir = 0.0; // interpolated goal direction (with respect to front direction of robot body)
+  private Motor leftShoulderPitch,rightShoulderPitch,leftShoulderRoll,rightShoulderRoll,rElbRoll,rElbYaw,lElbRoll,lElbYaw;
+
+  public FieldPlayer(int playerID, int teamID) {
+    super(playerID, teamID);
+    backwardsMotion     = new Motion("../../motions/Backwards.motion");
+    forwardsMotion      = new Motion("../../motions/Forwards.motion");
+    forwards50Motion    = new Motion("../../motions/Forwards50.motion");
+    turnRight40Motion   = new Motion("../../motions/TurnRight40.motion");
+    turnLeft40Motion    = new Motion("../../motions/TurnLeft40.motion");
+    turnRight60Motion   = new Motion("../../motions/TurnRight60.motion");
+    turnLeft60Motion    = new Motion("../../motions/TurnLeft60.motion");
+    turnLeft180Motion   = new Motion("../../motions/TurnLeft180.motion");
+    sideStepRightMotion = new Motion("../../motions/SideStepRight.motion");
+    sideStepLeftMotion  = new Motion("../../motions/SideStepLeft.motion");
+    shootMotion = new Motion("../../motions/Shoot.motion");
+
+    // move arms along the body
+    leftShoulderPitch = getMotor("LShoulderPitch");
+    leftShoulderRoll = getMotor("LShoulderRoll");
+    leftShoulderPitch.setPosition(1.5);
+
+    rightShoulderPitch = getMotor("RShoulderPitch");
+    rightShoulderRoll = getMotor("RShoulderRoll");
+    rightShoulderPitch.setPosition(1.5);
+
+    rElbRoll = getMotor("RElbowRoll");
+    rElbYaw = getMotor("RElbowYaw");
+    lElbRoll = getMotor("LElbowRoll");
+    lElbYaw = getMotor("LElbowRoll");
+  }
+
+  // normalize angle between -PI and +PI
+  private double normalizeAngle(double angle) {
+    while (angle > Math.PI) angle -= 2.0 * Math.PI;
+    while (angle < -Math.PI) angle += 2.0 * Math.PI;
+    return angle;
+  }
+
+  // relative body turn
+  private void turnBodyRel(double angle) {
+    if (angle > 0.7)
+      turnRight60();
+    else if (angle < -0.7)
+      turnLeft60();
+    else if (angle > 0.3)
+      turnRight40();
+    else if (angle < -0.3)
+      turnLeft40();
+  }
+
+  private void moveHandsAwayFromBody(){
+      rightShoulderPitch.setPosition(2.0);
+      rightShoulderRoll.setPosition(-0.6);
+      rElbRoll.setPosition(1.5);
+      rElbYaw.setPosition(0.0);
+      
+      leftShoulderRoll.setPosition(0.6);
+      leftShoulderPitch.setPosition(2.0);
+      lElbRoll.setPosition(-1.5);
+      lElbYaw.setPosition(-1.5);
+  }
+
+
+  protected void runStep() {
+    super.runStep();
+    double dir = camera.getGoalDirectionAngle();
+    if (dir != NaoCam.UNKNOWN)
+      goalDir = dir - headYawPosition.getValue();
+  }
+
+  private void turnRight60() {
+    playMotion(turnRight60Motion); // 59.2 degrees
+    goalDir = normalizeAngle(goalDir - 1.033);
+  }
+
+  private void turnLeft60() {
+    playMotion(turnLeft60Motion); // 59.2 degrees
+    goalDir = normalizeAngle(goalDir + 1.033);
+  }
+
+  private void turnRight40() {
+    playMotion(turnRight40Motion); // 39.7 degrees
+    goalDir = normalizeAngle(goalDir - 0.693);
+  }
+
+  private void turnLeft40() {
+    playMotion(turnLeft40Motion); // 39.7 degrees
+    goalDir = normalizeAngle(goalDir + 0.693);
+  }
+  
+  private void turnLeft180() {
+    playMotion(turnLeft180Motion); // 163.6 degrees
+    goalDir = normalizeAngle(goalDir + 2.855);
+  }
+
+  @Override public void run() {
+    step(SIMULATION_STEP);
+    while (true) {
+
+      runStep();
+      getUpIfNecessary();
+
+       while (getBallDirection() == NaoCam.UNKNOWN) {
+        System.out.println("searching the ball"); 
+        getUpIfNecessary();
+        if (getBallDirection() != NaoCam.UNKNOWN) break;
+        moveHandsAwayFromBody();
+        if (getBallDirection() != NaoCam.UNKNOWN) break;
+        headScan();
+        if (getBallDirection() != NaoCam.UNKNOWN) break;
+        playMotion(backwardsMotion);
+        if (getBallDirection() != NaoCam.UNKNOWN) break;
+        playMotion(backwardsMotion);
+        if (getBallDirection() != NaoCam.UNKNOWN) break;
+        moveHandsAwayFromBody();
+        headScan();
+        if (getBallDirection() != NaoCam.UNKNOWN) break;
+        turnLeft180();
+       }
+
+
+      double ballDir = getBallDirection();
+      double ballDist = getBallDistance();
+
+      System.out.println("ball dist: " + ballDist + " ball dir: " + ballDir + " goal dir: " + goalDir);
+
+       if (ballDist < 0.22) {
+        System.out.println("short distance");
+
+        if(ballDist<0.15){
+          playMotion(shootMotion);
+        }
+        if (ballDir < -0.15){
+          playMotion(sideStepLeftMotion);
+          moveHandsAwayFromBody();
+        }
+        else if (ballDir > 0.15){
+          playMotion(sideStepRightMotion);
+          moveHandsAwayFromBody();
+        }
+        else if (goalDir < -0.35)
+          turnLeft40();
+        else if (goalDir > 0.35)
+          turnRight40();
+        else {
+          //System.out.println("shooting !!!");
+          playMotion(shootMotion);
+        }
+      }
+      else {
+        //System.out.println("long distance");
+        double goDir = normalizeAngle(ballDir - goalDir);
+
+        if (goDir < ballDir - 0.5)
+          goDir = ballDir - 0.5;
+        else if (goDir > ballDir + 0.5)
+          goDir = ballDir + 0.5;
+
+        goDir = normalizeAngle(goDir);
+
+        turnBodyRel(goDir);
+        if (ballDist < 0.6)
+          playMotion(forwardsMotion);
+        else
+          playMotion(forwards50Motion);
+      }
+    }
+  }
+}

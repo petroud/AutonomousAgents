@@ -1,0 +1,1 @@
+This is a simple modified version of 'nao_team_1' controller developed by Kouretes at TUC that lets NAO robot (by Aldebaran) play football with a basic concept. Modifications were made for ball-kick motion and for fall detection mechanism.
