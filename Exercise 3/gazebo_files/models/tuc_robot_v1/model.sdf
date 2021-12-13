@@ -1,0 +1,267 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+  <model name="my_robot">
+    <static>false</static>
+    
+        <link name='chassis'>
+            <pose>0 0 .1 0 0 0</pose>
+
+            <collision name='collision'>
+              <geometry>
+                <box>
+                  <size>.4 .2 .05</size>
+                </box>
+              </geometry>
+            </collision>
+            
+            
+            <visual name='solar_panel_L'>
+             <pose>-0.1 0.30 0.01 0.07 0.21 0</pose>
+                 <geometry>
+                     <box>
+                      <size>0.12 0.25 0.005</size>
+                    </box>
+                </geometry>
+                <material>
+                    <script>
+                       <uri>model://tuc_robot_v1/materials/scripts</uri>
+                       <uri>model://tuc_robot_v1/materials/textures</uri>
+                       <name>Panel/Normal</name>
+                    </script>
+                </material>
+            </visual>
+            <visual name='solar_panel_bracket_L'>
+                <pose>-0.1 0.15 0.002 -1.55 0 0</pose>
+                 <geometry>
+                  <cylinder>
+                     <radius>0.004</radius>
+                     <length>0.1</length>
+                   </cylinder>
+             </geometry>
+             </visual>
+
+            <visual name='visual'>
+              <geometry>
+                <box>
+                  <size>.4 .2 .05</size>
+                </box>
+              </geometry>
+              
+              <material>
+                    <script>
+                       <uri>model://tuc_robot_v1/materials/scripts</uri>
+                       <uri>model://tuc_robot_v1/materials/textures</uri>
+                       <name>Rover/Normal</name>
+                    </script>
+                </material>
+            </visual>
+            
+            <visual name='solar_panel_bracket_R'>
+                <pose>-0.1 -0.15 0.002 1.55 -0 0</pose>
+                    <geometry>
+                         <cylinder>
+                          <radius>0.004</radius>
+                          <length>0.1</length>
+                         </cylinder>
+                     </geometry>
+            </visual>
+          <visual name='solar_panel_R'>
+            <pose>-0.1 -0.30 0.01 -0.07 0.21 -0</pose>
+            <geometry>
+              <box>
+                <size>0.12 0.25 0.005</size>
+              </box>
+            </geometry>
+            <material>
+                <script>
+                   <uri>model://tuc_robot_v1/materials/scripts</uri>
+                   <uri>model://tuc_robot_v1/materials/textures</uri>
+                   <name>Panel/Normal</name>
+                </script>
+            </material>
+          </visual>
+          
+          <visual name='camera_bracket'>
+                 <pose>0.13 0.05 0.05 0 -0 0</pose>
+                         <geometry>
+                          <cylinder>
+                           <radius>0.004</radius>
+                           <length>0.1</length>
+                             </cylinder>
+                            </geometry>
+                <material>
+                      <ambient>0.8 0.8 0.8 1</ambient>
+                      <diffuse>0 0 0 1</diffuse>
+                      <specular>0 0 0 1</specular>
+                      <emissive>0 0 0 1</emissive>
+                </material>
+                <transparency>0</transparency>
+                <cast_shadows>1</cast_shadows>
+          </visual>
+          
+          <visual name='camera'>
+                <pose>0.13 0.01 0.10 0 -0 0</pose>
+                <geometry>
+                  <box>
+                    <size>0.03 0.1 0.035</size>
+                  </box>
+                </geometry>
+               <material>
+                    <script>
+                       <uri>model://tuc_robot_v1/materials/scripts</uri>
+                       <uri>model://tuc_robot_v1/materials/textures</uri>
+                       <name>Camera/Normal</name>
+                    </script>
+                </material>
+                <transparency>0</transparency>
+                <cast_shadows>1</cast_shadows>
+          </visual>
+          
+           <visual name='indexer_2'>
+                 <pose>-0.14 0.09 0.02 0 -0 0</pose>
+                 <geometry>
+                     <cylinder>
+                           <radius>0.004</radius>
+                            <length>0.02</length>
+                     </cylinder>
+                 </geometry>
+                 <material> 
+                  <ambient>0 0 0 1</ambient>
+                  <diffuse>0 0 0 1</diffuse>
+                  <specular>0 0 0 1</specular>
+                  <emissive>1 1 0 1</emissive>
+                </material>
+                <transparency>0</transparency>
+                <cast_shadows>1</cast_shadows>
+            </visual>
+            <visual name="indexer_1">
+                <pose>-0.16 0.09 0.02 0 -0 0</pose>
+                <geometry>
+                  <cylinder>
+                    <radius>0.004</radius>
+                    <length>0.02</length>
+                  </cylinder>
+                </geometry>
+                <material>   
+                      <ambient>0 0 0 1</ambient>
+                      <diffuse>0 0 0 1</diffuse>
+                      <specular>0 0 0 1</specular>
+                      <emissive>0 1 0 1</emissive>
+                </material>
+                <transparency>0</transparency>
+                <cast_shadows>1</cast_shadows>
+             </visual>
+            
+            <collision name='caster_collision'>
+            <pose>-0.15 0 -0.05 0 0 0</pose>
+            <geometry>
+                <sphere>
+                <radius>.05</radius>
+              </sphere>
+            </geometry>
+
+            <surface>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                  <slip1>1.0</slip1>
+                  <slip2>1.0</slip2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+
+          <visual name='caster_visual'>
+            <pose>-0.15 0 -0.05 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>.05</radius>
+              </sphere>
+            </geometry>
+            
+            <material>
+                <script>
+                   <uri>model://tuc_robot_v1/materials/scripts</uri>
+                   <uri>model://tuc_robot_v1/materials/textures</uri>
+                   <name>Wheel/Normal</name>
+                </script>
+            </material>
+          </visual>
+          </link>
+          
+        <link name="left_wheel">
+        <pose>0.1 0.115 0.1 0 1.5707 1.5707</pose>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>.08</radius>
+              <length>.03</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>.08</radius>
+              <length>.03</length>
+            </cylinder>
+          </geometry>
+          <material>
+                <script>
+                   <uri>model://tuc_robot_v1/materials/scripts</uri>
+                   <uri>model://tuc_robot_v1/materials/textures</uri>
+                   <name>Wheel/Normal</name>
+                </script>
+        </material>
+        </visual>
+      </link>
+      
+      
+       <link name="right_wheel">
+        <pose>0.1 -0.115 0.1 0 1.5707 1.5707</pose>
+        <collision name="collision">
+          <geometry>
+            <cylinder>
+              <radius>.08</radius>
+              <length>.03</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder>
+              <radius>.08</radius>
+              <length>.03</length>
+            </cylinder>
+          </geometry>
+          <material>
+                <script>
+                   <uri>model://tuc_robot_v1/materials/scripts</uri>
+                   <uri>model://tuc_robot_v1/materials/textures</uri>
+                   <name>Wheel/Normal</name>
+                </script>
+        </material>
+        </visual>
+      </link>
+      
+        <joint type="revolute" name="left_wheel_hinge">
+        <pose>0 0 -0.03 0 0 0</pose>
+        <child>left_wheel</child>
+        <parent>chassis</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+        </axis>
+      </joint>
+
+      <joint type="revolute" name="right_wheel_hinge">
+        <pose>0 0 0.03 0 0 0</pose>
+        <child>right_wheel</child>
+        <parent>chassis</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+        </axis>
+      </joint>          
+          
+  </model>
+</sdf>

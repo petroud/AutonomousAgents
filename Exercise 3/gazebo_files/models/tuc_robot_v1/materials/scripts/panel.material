@@ -1,0 +1,59 @@
+material Panel/Normal
+{
+    receive shadows off
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture panel.bmp
+            }
+        }
+    }
+}
+
+material Wheel/Normal
+{
+    receive shadows off
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture wheel.bmp
+            }
+        }
+    }
+}
+
+material Camera/Normal
+{
+    receive shadows off
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture camera.bmp
+            }
+        }
+    }
+}
+
+material Rover/Normal
+{
+    receive shadows off
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture texture.bmp
+            }
+        }
+    }
+}

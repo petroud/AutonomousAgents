@@ -1,0 +1,1 @@
+A simple robot model produced with Gazebo simulator was added to a new created world containing a custom built house. The whole project was developed with Gazebo Simulator 11 in Ubuntu 20.04 LTS.
